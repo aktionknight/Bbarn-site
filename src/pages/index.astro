@@ -1,0 +1,54 @@
+---
+import Scene from '../components/scene.jsx';
+import StoolModel from  '../components/stool.jsx';
+import TextOverlay from '../components/textoverlay.jsx';
+import HeaderComp from '../components/header.jsx';
+---
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>The Bbarn</title>
+    </head>
+    <body class="bg-black text-white w-screen overflow-x-hidden">
+        
+        
+        <HeaderComp client:only="react"/>
+        
+            
+            
+
+            <div class="fixed inset-0 w-full h-full z-20">
+                <Scene client:only="react"/>
+            </div>
+            <div class="fixed inset-0 w-full h-full z-1">
+                <StoolModel client:only="react" />
+            </div>
+
+            
+        
+
+
+        <div class="relative h-[470vh] w-full pointer-events-none"></div>
+
+
+        <div class="relative bg-white text-black min-h-screen flex flex-col items-center pt-32">
+            
+            <div class="absolute inset-0 z-0 pointer-events-none">
+                 <TextOverlay client:only="react"/>
+            </div>
+
+            <div class="h-[500vh]"></div>
+            
+
+            <div class="h-screen"></div>
+        </div>
+
+        <div class="relative z-30 bg-zinc-900 text-white h-[400vh] flex flex-col items-center">
+            
+            <h2 class="fixed text-6xl font-bold mt-[20vh]">What do we do ?</h2>
+        </div>
+
+    </body>
+</html>

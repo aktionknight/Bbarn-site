@@ -1,0 +1,11 @@
+Model Information:
+* title:	Stool
+* source:	https://sketchfab.com/3d-models/stool-d8f4805061c54ffa99c1d6ea97dda76f
+* author:	warcool (https://sketchfab.com/warcool)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Stool" (https://sketchfab.com/3d-models/stool-d8f4805061c54ffa99c1d6ea97dda76f) by warcool (https://sketchfab.com/warcool) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
