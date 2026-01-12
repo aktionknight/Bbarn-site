@@ -3,6 +3,7 @@ import Scene from '../components/scene.jsx';
 import StoolModel from  '../components/stool.jsx';
 import TextOverlay from '../components/textoverlay.jsx';
 import HeaderComp from '../components/header.jsx';
+import Demos from '../components/demos.jsx';
 ---
 
 <html lang="en">
@@ -19,10 +20,10 @@ import HeaderComp from '../components/header.jsx';
             
             
 
-            <div class="fixed inset-0 w-full h-full z-20">
+            <div class="fixed inset-0 w-full h-full z-20 mt-[-10vh]">
                 <Scene client:only="react"/>
             </div>
-            <div class="fixed inset-0 w-full h-full z-1">
+            <div class="fixed inset-0 w-full h-full z-1 mt-[-10vh]" >
                 <StoolModel client:only="react" />
             </div>
 
@@ -30,7 +31,7 @@ import HeaderComp from '../components/header.jsx';
         
 
 
-        <div class="relative h-[470vh] w-full pointer-events-none"></div>
+        <div class="relative h-[440vh] w-full pointer-events-none"></div>
 
 
         <div class="relative bg-white text-black min-h-screen flex flex-col items-center pt-32">
@@ -48,6 +49,7 @@ import HeaderComp from '../components/header.jsx';
         <div class="relative z-30 bg-zinc-900 text-white h-[400vh] flex flex-col items-center">
             
             <h2 class="fixed text-6xl font-bold mt-[20vh]">What do we do ?</h2>
+            <Demos client:only="react"/>
         </div>
 
     </body>

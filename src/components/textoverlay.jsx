@@ -12,7 +12,7 @@ export default function TextOverlay() {
       // It starts after the 200vh spacer.
       // So its Top Edge position relative to the screen is:
       // (Spacer Height) - (Amount Scrolled)
-      const whiteSectionEdge = (window.innerHeight*4.85) - scrollY;
+      const whiteSectionEdge = (window.innerHeight*4.552) - scrollY;
 
       // 2. Update the Clip Path
       // We clip everything ABOVE that edge.
