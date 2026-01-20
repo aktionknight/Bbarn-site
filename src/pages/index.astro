@@ -14,24 +14,24 @@ import Demos from '../components/demos.jsx';
     </head>
     <body class="bg-black text-white w-screen overflow-x-hidden">
         
-        
+        <div id="blur" class="h-[200vh]">
+
+        </div>
         <HeaderComp client:only="react"/>
         
             
+        
             
-
+<div class="relative h-[400vh]" id="rotation-track"></div>
             <div class="fixed inset-0 w-full h-full z-20 mt-[-10vh]">
                 <Scene client:only="react"/>
             </div>
             <div class="fixed inset-0 w-full h-full z-1 mt-[-10vh]" >
                 <StoolModel client:only="react" />
             </div>
-
+        
             
         
-
-
-        <div class="relative h-[440vh] w-full pointer-events-none"></div>
 
 
         <div class="relative bg-white text-black min-h-screen flex flex-col items-center pt-32">

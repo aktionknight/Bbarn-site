@@ -5,7 +5,7 @@ import { InstagramEmbed } from 'react-social-media-embed';
 // --- 1. THE BASIC CARD UI ---
 const VideoCard = ({ title, category, children }) => {
   return (
-    <div className="relative shrink-0 h-full w-full md:w-[328px] md:h-[500px] rounded-2xl overflow-hidden bg-zinc-800 shadow-2xl group">
+    <div className="relative shrink-0 h-full w-full md:w-[328px] md:h-[400px] scale-4 rounded-2xl overflow-hidden bg-zinc-800 shadow-2xl group">
       <div className="w-full h-full bg-black flex items-center justify-center">
          <div className="w-full h-full overflow-hidden">
             {children}
@@ -50,9 +50,8 @@ export default function Demos() {
   });
 
   // HORIZONTAL SCROLL:
-  // Starts at 0.3 (giving all cards time to finish arriving by 0.25)
-  // Ends at 0.9 (Safe buffer)
-  const x = useTransform(scrollYProgress, [0.3, 0.9], ["0%", "-50%"]);
+
+  const x = useTransform(scrollYProgress, [0, 0.9], ["-50%", "50%"]);
 
   return (
     // Height 600vh ensures the animations feel slow and smooth
@@ -67,7 +66,7 @@ export default function Demos() {
                 style={{ opacity: useTransform(scrollYProgress, [0, 0.1], [0, 1]) }}
                 className="text-4xl md:text-6xl font-bold text-white mb-8 font-bbarn"
             >
-                Social Highlights
+                Placeholder Text
             </motion.h2>
 
             {/* THE HORIZONTAL TRACK */}
@@ -76,35 +75,33 @@ export default function Demos() {
                 {/* Wrap each card in ParallaxCard and pass the index! */}
                 
                 {/* CARD 1 (Index 0) */}
-                <ParallaxCard progress={scrollYProgress} index={0}>
+                <ParallaxCard progress={scrollYProgress} index={3}>
                     <VideoCard title="InYourDistrict" category="Reel">
-                        <InstagramEmbed url="https://www.instagram.com/p/DNh3Nuyz0AN/" width="100%" />
+                        <InstagramEmbed url="https://www.instagram.com/p/DNh3Nuyz0AN/" width="100%"  />
                     </VideoCard>
                 </ParallaxCard>
 
                 {/* CARD 2 (Index 1) */}
-                <ParallaxCard progress={scrollYProgress} index={1}>
+                <ParallaxCard progress={scrollYProgress} index={2}>
                     <VideoCard title="Campaign 02" category="Teaser">
-                        <InstagramEmbed url="https://www.instagram.com/p/DNh3Nuyz0AN/" width="100%" />
+                        <InstagramEmbed url="https://www.instagram.com/p/DHWMBqWiB4X/" width="100%" />
                     
                     </VideoCard>
                 </ParallaxCard>
 
                 {/* CARD 3 (Index 2) */}
-                <ParallaxCard progress={scrollYProgress} index={2}>
+                <ParallaxCard progress={scrollYProgress} index={1}>
                     <VideoCard title="Launch Event" category="Story">
-                        <div className="w-full h-full bg-purple-900 flex items-center justify-center text-white">
-                            VIDEO 03
-                        </div>
+                        <InstagramEmbed url="https://www.instagram.com/p/DM2i0TAzaFj/" width="100%" />
                     </VideoCard>
                 </ParallaxCard>
 
                  {/* CARD 4 (Index 3) */}
-                 <ParallaxCard progress={scrollYProgress} index={3}>
+                 <ParallaxCard progress={scrollYProgress} index={0}>
                     <VideoCard title="Behind Scenes" category="BTS">
-                        <div className="w-full h-full bg-red-900 flex items-center justify-center text-white">
-                            VIDEO 04
-                        </div>
+                        <InstagramEmbed url="https://www.instagram.com/p/DKZ2Buqit_Y/" width="100%" />
+
+                        
                     </VideoCard>
                 </ParallaxCard>
 

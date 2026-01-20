@@ -2,6 +2,9 @@ import { Canvas, useFrame, addEffect } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import React, { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
+import CameraRig from './camera';
+import { Camera } from 'three';
+
 
 // --- PART 1: THE TV COMPONENT ---
 function Tv() {
@@ -14,21 +17,25 @@ function Tv() {
   // The 60FPS Game Loop
   useFrame(() => {
     if (!groupRef.current) return;
-    const currScroll = window.scrollY;
-    const threshold = window.innerHeight * 4;
-    let targetRotation = 0;
+    const track = document.getElementById('rotation-track');
+        if(!track) return;
 
-    if (currScroll < threshold) {
-       // Calculate precise angle based on scroll progress
-       const progress = currScroll / threshold;
-       targetRotation = progress * (Math.PI * 2 * totalSpins);
-    } else {
-       // Snap to final angle if past the tunnel
-       targetRotation = Math.PI * 2 * totalSpins;
+        const box =track.getBoundingClientRect();
+        const scrollY = box.height - window.innerHeight;       
+        let progress = -box.top/scrollY;
+
+    if (progress < 0) {
+       progress=0;
+    } 
+    if (progress>1){
+       progress=1;
     }
 
     // Direct Update (No Re-renders)
-    groupRef.current.rotation.y = targetRotation;
+    if(groupRef.current)
+      {
+        groupRef.current.rotation.y = -progress * (Math.PI * 2 * totalSpins);
+      };
   });
 
   return (
@@ -63,7 +70,7 @@ export default function Scene() {
 
   return (
     <Canvas>
-      
+      <CameraRig />
       <ambientLight intensity={2.5} />
       <pointLight position={[0, 0, 10]} />
       <Tv />

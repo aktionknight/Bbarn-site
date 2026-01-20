@@ -5,18 +5,17 @@ export default function TextOverlay() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
-      
-      // 1. Where is the White Section?
-      // It starts after the 200vh spacer.
-      // So its Top Edge position relative to the screen is:
-      // (Spacer Height) - (Amount Scrolled)
-      const whiteSectionEdge = (window.innerHeight*4.552) - scrollY;
+      const track = document.getElementById('rotation-track');
+        if(!track) return;
+
+        const box =track.getBoundingClientRect();
+        let edge = box.bottom + 105;
+        if(edge<0) edge=0;
+        if(edge > window.innerHeight)edge = window.innerHeight;
 
       // 2. Update the Clip Path
       // We clip everything ABOVE that edge.
-      setClipTop(whiteSectionEdge);
+      setClipTop(edge);
     };
 
     window.addEventListener('scroll', handleScroll);
