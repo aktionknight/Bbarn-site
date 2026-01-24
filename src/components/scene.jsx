@@ -4,15 +4,25 @@ import React, { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
 import CameraRig from './camera';
 import { Camera } from 'three';
+import { i } from 'framer-motion/client';
+import Spotlight from './spotlight';
+
 
 
 // --- PART 1: THE TV COMPONENT ---
 function Tv() {
-  const { scene } = useGLTF('/bbarn-tv.glb');
-  
+  const { scene , materials} = useGLTF('/bbarn-tv.glb');
+  console.log(materials)
   const groupRef = useRef(); 
   
   const totalSpins = 2; 
+  useEffect(() => {
+    if (materials['Material.001']) {
+        // Force it to be black instantly
+        materials['Material.001'].emissiveIntensity = -0.6;
+    }
+  }, [materials]);
+
 
   // The 60FPS Game Loop
   useFrame(() => {
@@ -23,6 +33,20 @@ function Tv() {
         const box =track.getBoundingClientRect();
         const scrollY = box.height - window.innerHeight;       
         let progress = -box.top/scrollY;
+
+    let intensity = progress/0.5;
+    if(intensity>1){
+      intensity=1;
+    }
+    if(intensity<0){
+      intensity=0;
+    }
+    if(materials['Material.001'])
+    {
+      materials['Material.001'].emissiveIntensity = 0.6*(intensity) - 0.5;
+    }
+
+
 
     if (progress < 0) {
        progress=0;
@@ -71,8 +95,9 @@ export default function Scene() {
   return (
     <Canvas>
       <CameraRig />
-      <ambientLight intensity={2.5} />
-      <pointLight position={[0, 0, 10]} />
+      <ambientLight intensity={1} />
+      <Spotlight intensity={1} />
+      
       <Tv />
       
     </Canvas>
