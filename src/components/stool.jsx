@@ -1,5 +1,5 @@
 import { Canvas, useFrame, addEffect } from '@react-three/fiber';
-import { useGLTF } from '@react-three/drei';
+import { useGLTF,ContactShadows} from '@react-three/drei';
 import React, { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
 import CameraRig from './camera';
@@ -38,11 +38,29 @@ function Stool(){
 
   return (
     <group ref={groupRef} position={[0,-4.45, -1.3]} class="z-0">
+      
     <primitive object={scene} scale={0.05} position={[0,0,0]}/>
     </group>
   );}
 
+function Bg()
+{
+  const {scene,materials} = useGLTF('/BG.glb');
+  return(
+    <>
+    <primitive object={scene} position={[0,-8.65,2]} rotation={[0,-1.6,0]} scale={7}/>
+    <ContactShadows
+            
+            position={[0, -3, -0.4]} 
+            opacity={1.1}
+            scale={10}
+            blur={2.5}
+            far={5}
+          />
+    </>
+  );
 
+}
 
 
 export default function StoolModel() {
@@ -67,11 +85,12 @@ export default function StoolModel() {
   }, []);
 
   return (
-<Canvas>
+<Canvas shadows style={{ pointerEvents: 'none' }}>
       <CameraRig />
-      <ambientLight intensity={2.5} />
-      <pointLight position={[0, 0, 10]} />
+      
+     
       
       <Stool />
+      <Bg />
     </Canvas>
   );}

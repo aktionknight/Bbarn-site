@@ -20,12 +20,11 @@ export default function CameraRig()
     useFrame((state)=>
     {
         const track = document.getElementById('rotation-track');
-        const blurDiv = document.getElementById('blur');
+        //const blurDiv = document.getElementById('blur');
 
         if(!track) return;
         
-        const blurRect = blurDiv.getBoundingClientRect();
-        let blurIntensity = blurRect.bottom/blurRect.height;
+        
         
 
         const box =track.getBoundingClientRect();
@@ -35,16 +34,14 @@ export default function CameraRig()
         if(progress<0) progress=0;
         const pointoncurve = curve.getPoint(progress);
 
-        if(blurIntensity>1) blurIntensity=1;
-        if(blurIntensity<0)blurIntensity=0;
-        if(dofRef.current)dofRef.current.bokehScale = blurIntensity*10;
+        
 
         let exposureProg = progress/0.5;
         if(exposureProg>1) exposureProg=1;
         if(exposureProg<0) exposureProg=0;
        // let exposureProgress = exposureProg;
-        let exposure = 0.2 + (exposureProg);
-        
+        let exposure = (exposureProg*0.06);
+        if(exposureProg>1)exposure=1;
         state.gl.toneMappingExposure = exposure;
         //const startpos = new Vector3(0,2,7);
         //const endpos = new Vector3(0,0,3);

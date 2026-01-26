@@ -6,7 +6,8 @@ export default {
     extend: {
       fontFamily :
       {
-       bbarn : ['"Lexend"','sans-serif']
+       bbarn : ['"Lexend"','sans-serif'],
+       helvetica : ['"Helvetica"','sans-serif']
       }
     },
   },

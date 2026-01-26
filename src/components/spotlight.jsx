@@ -1,12 +1,13 @@
 import React,{useRef} from 'react';
-import {useFrame, } from '@react-three/fiber';
-import {SpotLight } from '@react-three/drei';
+import {useFrame } from '@react-three/fiber';
+import {SpotLight ,useGLTF} from '@react-three/drei';
 import { Vector3 } from 'three';
 
 
 
 export default function Spotlight()
 {
+    
 
     const lightRef = React.useRef();
 
@@ -37,6 +38,9 @@ export default function Spotlight()
     return (
         <SpotLight
       ref={lightRef}
+      castShadow={true}
+      shadow-mapSize={[1024,1024]}
+      shadow-bias={-0.0001}
       position={[3, 5, 0]}    // High up and to the right
       target-position={[0, -2, -2]} // Pointing directly at the TV
       distance={15}           // How far the light reaches

@@ -28,12 +28,12 @@ export default function TextOverlay() {
       {/* LAYER 1: The White Text (Always visible behind) */}
       <div className="fixed top-0 left-0 w-full h-full flex flex-col items-center justify-center pointer-events-none z-1 mt-[-15vh]">
         <div className="flex flex-col items-center w-fit">
-        <h1 className="text-[8rem] font-bbarn font-bold leading-none text-white">
+        <h1 className="text-[8rem] font-helvetica tracking-[-0.04em] font-bold leading-none text-white">
           The Bbarn.
         </h1>
         <div className="flex flex-row justify-between w-full ">
-        <p className="text-2xl text-gray-200">The Best</p>
-        <p className="text-2xl text-gray-200">there is.</p>
+        <p className="text-2xl text-gray-200  mx-1">The Best</p>
+        <p className="text-2xl text-gray-200  mx-1">there is.</p>
         </div>
         </div>
       </div>
@@ -51,12 +51,12 @@ export default function TextOverlay() {
       >
         {/* You can make this ANY color. Let's do Red for effect. */}
         <div className="flex flex-col items-center w-fit">
-        <h1 className="text-[8rem] font-bbarn font-bold leading-none text-red-600">
+        <h1 className="text-[8rem] font-helvetica tracking-[-0.04em] font-bold leading-none text-red-600">
           The Bbarn.
         </h1>
         <div className="flex flex-row justify-between w-full">
-        <p className="text-2xl text-red-300">The Best</p>
-        <p className="text-2xl text-red-300"> there is.</p>
+        <p className="text-2xl text-red-300 mx-1">The Best</p>
+        <p className="text-2xl text-red-300 mx-1"> there is.</p>
         </div>
         </div>
        

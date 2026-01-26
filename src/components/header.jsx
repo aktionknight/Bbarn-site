@@ -42,19 +42,19 @@ return(
             <div className="flex justify-between items-center px-8 py-6">
                 
                 {/* Logo */}
-                <h1 className="text-2xl font-bbarn font-bold text-white font-bbarn">
+                <h1 className="text-2xl font-helvetica tracking-[-0.04em] text-white font-bbarn">
                     The Bbarn.
                 </h1>
 
                 {/* Nav Links */}
-                <nav className="flex gap-6 text-white font-medium">
-                    <a href="#work" className="hover:opacity-50 transition-opacity">Work</a>
-                    <a href="#about" className="hover:opacity-50 transition-opacity">About</a>
-                    <a href="#contact" className="hover:opacity-50 transition-opacity">Contact</a>
+                <nav className="flex gap-6 text-white  font-helvetica tracking-[-0.04em] font-medium">
+                    
+                    <a href="#about" className="hover:opacity-50 transition-opacity">Est. 2024</a>
+                    
                 </nav>
 
                 {/* CTA Button */}
-                <button className="bg-black text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-gray-800 transition-colors">
+                <button className="bg-black text-white px-6 py-2 rounded-full text-sm font-helvetica tracking-[-0.04em] hover:opacity-50 transition-opacity">
                     Book
                 </button>
 

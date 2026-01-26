@@ -1,6 +1,16 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
 
+@font-face{
+    font-family : 'helvetica';
+    src : url('/fonts/Helvetica.ttf') format('ttf'),
+         
+}
+
+.helvetica{
+    font-family: 'Helvetica', sans-serif;
+    letter-spacing: -2em;
+}
 
 html.lenis, html.lenis body {
  height: auto;
