@@ -45,17 +45,19 @@ function Stool(){
 
 function Bg()
 {
-  const {scene,materials} = useGLTF('/BG.glb');
+  const posRef = useRef();
+  const {scene,materials} = useGLTF('/BG-test.glb');
+
+  console.log([scene.position.x,scene.position.y,scene.position.z])
   return(
     <>
-    <primitive object={scene} position={[0,-8.65,2]} rotation={[0,-1.6,0]} scale={7}/>
+    <primitive object={scene} position={[-0.4,-9,-2]} rotation={[0,-1.6,0]} scale={7}/>
     <ContactShadows
-            
-            position={[0, -3, -0.4]} 
+            position={[0, -4, 0]} 
             opacity={1.1}
-            scale={10}
-            blur={2.5}
-            far={5}
+            scale={20}
+            blur={1.3}
+            far={8}
           />
     </>
   );

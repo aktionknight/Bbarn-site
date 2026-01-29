@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Lenis from 'lenis';
 import CameraRig from './camera';
 import Spotlight from './spotlight';
+import FlyingComp from './flying';
 
 import Dust from './dust';
 
@@ -19,14 +20,15 @@ function Tv() {
 
   const [hasPlayed, setHasPlayed] = useState(false);
   const { scene, materials } = useGLTF('/bbarn-tv.glb');
-  
 
-  
+
+
   // REFS
   const groupRef = useRef();
   const shadowRef = useRef();
   const dustRef = useRef();
   const totalSpins = 2;
+  const bodyLightRef = useRef();
 
   // --- HELPER: Safely set opacity on Groups OR Meshes ---
   const setOpacity = (obj, opacity) => {
@@ -57,14 +59,37 @@ function Tv() {
     videoTexture.offset.set(0.1, -0.247);
     videoTexture.repeat.set(0.8, 1.5);
 
-    const screenMat = materials['Material.001'];
+    const screenMat = materials['TVScreen.002'];
+    const tvMat = materials['TVBase'];
+
+    
+
     if (screenMat) {
         screenMat.map = videoTexture;
         screenMat.emissiveMap = videoTexture;
         screenMat.emissiveIntensity = 0; 
         screenMat.needsUpdate = true;
     }
+
+    scene.traverse((child) => {
+    if (child.isMesh) {
+      console.log(`Found Mesh: "${child.name}"`);
+      console.log(`   - Material Name: "${child.material.name}"`);
+      console.log(`   - Material Type: "${child.material.type}"`);
+      
+      // OPTIONAL: Force a visual change to see which part is which
+      // If you uncomment this, the whole TV body should turn Hot Pink.
+      // if (child.name === 'TV_Body_Mesh_Name_Here') {
+      //    child.material.color.set('hotpink'); 
+      // }
+      
+      child.castShadow = true;
+      child.receiveShadow = true;
+    }
+  });
+
   }, [scene, materials, videoTexture]);
+
 
   // 3. ANIMATION LOOP
   useFrame(() => {
@@ -72,6 +97,13 @@ function Tv() {
     
     const track = document.getElementById('rotation-track');
     if (!track) return;
+
+    const track2 = document.getElementById('zoomin');
+    if (!track2) return;
+
+    const track2box = track2.getBoundingClientRect();
+    const scrollY2 = track2box.height - window.innerHeight;       
+    let progress2 = -0.5 * track2box.top / scrollY2;
 
     const box = track.getBoundingClientRect();
     const scrollY = box.height - window.innerHeight;       
@@ -81,16 +113,32 @@ function Tv() {
     if (progress < 0) progress = 0; 
     if (progress > 1) progress = 1;
 
+    if (progress2 < 0) progress2 = 0;
+    if (progress2 > 0.35) progress2 = 0.35;
+
     // Rotation
     groupRef.current.rotation.y = -progress * (Math.PI * 2 * totalSpins);
+    
+    if(progress2>0){groupRef.current.position.z = -2.9+progress2*5;
+      groupRef.current.position.y = -2.7+progress2*1.5;
+    }
+    else {groupRef.current.position.z = -2.9;
+      groupRef.current.position.y = -2.7;
+    }
+
 
     // Screen Intensity
     let intensity = progress / 0.5;
     if (intensity > 1) intensity = 1;
     if (intensity < 0) intensity = 0;
 
-    if (materials['Material.001']) {
-      materials['Material.001'].emissiveIntensity = intensity * 20; 
+    if (materials['TVScreen.002']) {
+      materials['TVScreen.002'].emissiveIntensity = intensity * 10; 
+    }
+
+    if (bodyLightRef.current) {
+        // Ramp from 0 to 10 intensity
+        bodyLightRef.current.intensity = 20; 
     }
 
     // --- FADE OUT LOGIC (THE FIX) ---
@@ -122,7 +170,13 @@ function Tv() {
     <>
       <group ref={groupRef} position={[0, -2.7, -2.9]}>
         <primitive object={scene} scale={0.05} />
-        
+        <pointLight 
+        ref={bodyLightRef} 
+            position={[1, 2, 2]} 
+            distance={5} 
+            decay={2}
+            color="white"
+      />
       </group>
 
       
@@ -159,8 +213,8 @@ export default function Scene() {
     <Canvas shadows style={{ pointerEvents: 'none' }}>
       <CameraRig />
       
-      
-      
+      <pointLight intensity={500} />
+      <FlyingComp/>
       {/* Tv now handles the Shadows and Dust itself */}
       <Tv />
       
