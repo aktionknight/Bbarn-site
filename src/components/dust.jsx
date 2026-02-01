@@ -56,10 +56,10 @@ export default function Dust({ count = 1000 }) {
       */}
       <pointsMaterial
         map={texture}
-        size={0.03}
+        size={0.05}
         color="#ffffff"
         transparent
-        opacity={0.7}
+        opacity={1}
         sizeAttenuation={true}
         depthWrite={false} 
       />

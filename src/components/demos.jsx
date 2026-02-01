@@ -55,7 +55,7 @@ export default function Demos() {
 
   return (
     // Height 600vh ensures the animations feel slow and smooth
-    <section ref={targetRef} className="relative w-full h-[600vh] bg-zinc-900">
+    <section ref={targetRef} className="relative w-full h-[600vh] bg-gray-400">
       
       <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
         
@@ -64,9 +64,9 @@ export default function Demos() {
             {/* Title also gets a slight animation */}
             <motion.h2 
                 style={{ opacity: useTransform(scrollYProgress, [0, 0.1], [0, 1]) }}
-                className="text-4xl md:text-6xl font-bold text-white mb-8 font-bbarn"
+                className="text-4xl md:text-6xl font-helvetica tracking-[-0.04em] text-white mb-8"
             >
-                Placeholder Text
+                Bbarn's Special
             </motion.h2>
 
             {/* THE HORIZONTAL TRACK */}

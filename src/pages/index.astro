@@ -4,6 +4,7 @@ import StoolModel from  '../components/stool.jsx';
 import TextOverlay from '../components/textoverlay.jsx';
 import HeaderComp from '../components/header.jsx';
 import Demos from '../components/demos.jsx';
+import FlyingComp from '../components/flying.jsx';
 ---
 
 <html lang="en">
@@ -29,6 +30,7 @@ import Demos from '../components/demos.jsx';
             <div class="fixed inset-0 w-full h-full z-1 mt-[-10vh]" >
                 <StoolModel client:only="react" />
             </div>
+
         
             
         
@@ -38,19 +40,21 @@ import Demos from '../components/demos.jsx';
             
             <div class="absolute inset-0 z-0 pointer-events-none">
                  <TextOverlay client:only="react"/>
+                 
             </div>
 
-            <div id="zoomin" class="h-[600vh]"></div>
+            <div id="zoomin" class="h-[600vh] w-full z-10">
+                <FlyingComp client:only="react"/>
+            </div>
             
-
-            <div class="h-screen"></div>
         </div>
 
-        <div class="relative z-30 bg-zinc-900 text-white h-[400vh] flex flex-col items-center">
+        <div class="relative z-30 bg-gray-100 text-white h-[400vh] flex flex-col items-center">
             
             <h2 class="fixed text-6xl font-bold mt-[20vh]">What do we do ?</h2>
             <Demos client:only="react"/>
+            
         </div>
-
+        <div class=" relative bg-black w-screen h-[100vh] z-40">Hello</div>
     </body>
 </html>

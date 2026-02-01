@@ -51,7 +51,7 @@ function Bg()
   console.log([scene.position.x,scene.position.y,scene.position.z])
   return(
     <>
-    <primitive object={scene} position={[-0.4,-9,-2]} rotation={[0,-1.6,0]} scale={7}/>
+    <primitive object={scene} position={[0,-9,-2]} rotation={[0,-1.6,0]} scale={7}/>
     <ContactShadows
             position={[0, -4, 0]} 
             opacity={1.1}

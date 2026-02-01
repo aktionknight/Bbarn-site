@@ -73,9 +73,9 @@ function Tv() {
 
     scene.traverse((child) => {
     if (child.isMesh) {
-      console.log(`Found Mesh: "${child.name}"`);
-      console.log(`   - Material Name: "${child.material.name}"`);
-      console.log(`   - Material Type: "${child.material.type}"`);
+      ////console.log(`Found Mesh: "${child.name}"`);
+      //console.log(`   - Material Name: "${child.material.name}"`);
+      //console.log(`   - Material Type: "${child.material.type}"`);
       
       // OPTIONAL: Force a visual change to see which part is which
       // If you uncomment this, the whole TV body should turn Hot Pink.
@@ -133,7 +133,7 @@ function Tv() {
     if (intensity < 0) intensity = 0;
 
     if (materials['TVScreen.002']) {
-      materials['TVScreen.002'].emissiveIntensity = intensity * 10; 
+      materials['TVScreen.002'].emissiveIntensity = intensity * 15; 
     }
 
     if (bodyLightRef.current) {
@@ -170,13 +170,7 @@ function Tv() {
     <>
       <group ref={groupRef} position={[0, -2.7, -2.9]}>
         <primitive object={scene} scale={0.05} />
-        <pointLight 
-        ref={bodyLightRef} 
-            position={[1, 2, 2]} 
-            distance={5} 
-            decay={2}
-            color="white"
-      />
+        
       </group>
 
       
@@ -214,7 +208,7 @@ export default function Scene() {
       <CameraRig />
       
       <pointLight intensity={500} />
-      <FlyingComp/>
+      
       {/* Tv now handles the Shadows and Dust itself */}
       <Tv />
       
