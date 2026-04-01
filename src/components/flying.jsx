@@ -1,103 +1,89 @@
-import React, { useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Text } from '@react-three/drei';
+import React from 'react';
+import { useScrollProgress } from '../helpers/ScrollManager';
 
 // --- CONFIGURATION ---
 const WORDS_DATA = [
-  { text: "Branding", pos: [-6, 4, 0] },   // Top Left
-  { text: "Content Shoots", pos: [40, -8, 0] },  // Bottom Right
-  { text: "Editing", pos: [-20, 0, 0] }, 
-  { text: "Animation", pos: [-23, -7, 0] }, 
-  { text: "Illustrations", pos: [40, 0, 0]},   // Bottom Left
-  { text: "Design", pos: [25, 5, 0] },
-  {text:"Customs", pos:[-40,7,0]}         // Top Right
+  { text: "Branding", x: "12%", y: "18%" },
+  { text: "Content Shoots", x: "72%", y: "65%" },
+  { text: "Editing", x: "8%", y: "48%" },
+  { text: "Animations", x: "5%", y: "78%" },
+  { text: "Motion Graphics", x: "63%", y: "87%" },
+  { text: "Illustrations", x: "70%", y: "42%" },
+  { text: "Design", x: "83%", y: "16%" },
+  { text: "Customs", x: "23%", y: "68%" },
+
 ];
 
-function FlyingScene() {
-  const groupRef = useRef();
-  const letterRefs = useRef([]); 
-
-  useFrame(() => {
-    const box = document.getElementById("zoomin");
-    if (!box || !groupRef.current) return;
-
-    const rect = box.getBoundingClientRect();
-    const scrollAvailable = rect.height - window.innerHeight;
-
-    let progress = 0;
-    if (scrollAvailable > 0) {
-        progress = -rect.top / scrollAvailable;
-    }
-    
-    // Clamp Progress
-    if (progress > 1) progress = 1;
-    if (progress < 0) progress = 0;
-
-    const slowp =progress*1;
-
-    // --- 1. CONVERGENCE LOGIC ---
-    letterRefs.current.forEach((letterObj, index) => {
-        if(!letterObj) return;
-
-        const initialX = WORDS_DATA[index].pos[0];
-        const initialY = WORDS_DATA[index].pos[1];
-        
-        // A. X-Axis: Target is 0 (Horizontal Center)
-        // Formula: Start -> 0
-        letterObj.position.x = initialX * (1 - slowp)*0.6;
-
-        // B. Y-Axis: Target is -2.7 (Vertical TV Position)
-        // Formula: Start + (Distance * Progress)
-        const targetY = -3.2;
-        letterObj.position.y = initialY + ((slowp) * (targetY - initialY));
-
-        // C. Scale Logic (Fake Depth)
-        // Start Scale: 2 (Big/Close) -> End Scale: 0 (Tiny/Far)
-        const startScale = 2; 
-        const currentScale = startScale * (1 - slowp)*(index+1)/2.5;
-        
-        letterObj.scale.set(currentScale, currentScale, currentScale);
-    });
-  });
-
-  return (
-    <group ref={groupRef}>
-      {WORDS_DATA.map((word, i) => (
-        <Letter 
-            key={i} 
-            ref={(el) => (letterRefs.current[i] = el)}
-            text={word.text} 
-            pos={word.pos} 
-        />
-      ))}
-    </group>
-  );
-}
-
-// --- HELPER ---
-const Letter = React.forwardRef(({ text, pos }, ref) => {
-  return (
-    <Text
-      ref={ref}
-      position={pos}
-      color="black"
-      fontSize={1} 
-      anchorX="center"
-      anchorY="middle"
-      // font="/fonts/Helvetica.ttf" 
-    >
-      {text}
-    </Text>
-  );
-});
-
 export default function FlyingComp() {
+  // Use scroll progress from our context/helper
+  const { flyingProgress } = useScrollProgress();
+
   return (
-    <div style={{ width: '100%', height: '100%' }}>
-      <Canvas style={{ background: 'transparent' }}> 
-        <ambientLight intensity={1} />
-        <FlyingScene />
-      </Canvas>
+    <div style={containerStyle}>
+      {WORDS_DATA.map((word, i) => {
+        // Calculate threshold for each word to spread them out evenly during the scroll.
+        // Elements will appear roughly between 10% and 90% of the flying section scroll.
+        const threshold = (i + 1) / (WORDS_DATA.length + 2);
+        const isVisible = flyingProgress > threshold;
+
+        return (
+          <span
+            key={i}
+            className={isVisible ? 'fly-word fly-word--visible' : 'fly-word'}
+            style={{
+              left: word.x,
+              top: word.y,
+            }}
+          >
+            {word.text}
+          </span>
+        );
+      })}
+
+      {/* Scoped styles */}
+      <style>{cssRules}</style>
     </div>
   );
 }
+
+// --- STYLES ---
+
+const containerStyle = {
+  position: 'fixed',
+  inset: 0,
+  width: '100%',
+  height: '100%',
+  overflow: 'hidden',
+  pointerEvents: 'none',
+  zIndex: 0,
+};
+
+const cssRules = `
+  .fly-word {
+    position: absolute;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: clamp(1.1rem, 2.4vw, 2.6rem);
+    font-weight: 500;
+    color: #000;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+
+    /* Initial hidden state */
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(28px);
+
+    /* Transition handles the animation automatically when class changes */
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                filter 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, filter, transform;
+  }
+
+  .fly-word--visible {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translateY(0px);
+  }
+`;

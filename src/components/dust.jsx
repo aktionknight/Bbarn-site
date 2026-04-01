@@ -59,7 +59,7 @@ export default function Dust({ count = 1000 }) {
         size={0.05}
         color="#ffffff"
         transparent
-        opacity={1}
+        opacity={0.7}
         sizeAttenuation={true}
         depthWrite={false} 
       />

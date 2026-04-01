@@ -1,27 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useScrollProgress } from '../helpers/ScrollManager';
 
 export default function TextOverlay() {
   const [clipTop, setClipTop] = useState(10000); // Start hidden (high value)
+  const { scrollY } = useScrollProgress();
+  const trackRef = useRef(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const track = document.getElementById('rotation-track');
-        if(!track) return;
+    // Cache reference to rotation track
+    if (!trackRef.current) {
+      trackRef.current = document.getElementById('rotation-track');
+    }
 
-        const box =track.getBoundingClientRect();
-        let edge = box.bottom + 105;
-        if(edge<0) edge=0;
-        if(edge > window.innerHeight)edge = window.innerHeight;
+    const track = trackRef.current;
+    if (!track) return;
 
-      // 2. Update the Clip Path
-      // We clip everything ABOVE that edge.
-      setClipTop(edge);
-    };
+    const box = track.getBoundingClientRect();
+    let edge = box.bottom + 105;
+    if (edge < 0) edge = 0;
+    if (edge > window.innerHeight) edge = window.innerHeight;
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Run once on load
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    // Update the Clip Path
+    setClipTop(edge);
+  }, [scrollY]);
 
   return (
     <>

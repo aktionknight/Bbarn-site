@@ -1,46 +1,33 @@
-import { set } from 'astro:schema';
 import React, { useEffect, useState } from 'react';
+import { useScrollProgress } from '../helpers/ScrollManager';
+import Menu from './Menu';
 
 
-function appleglass()
-{
-    
+function appleglass() {
+
 }
 
 
-export default function HeaderComp()
-{
-    
-    const [isVisible,setIsVisible]=useState(false);
+export default function HeaderComp() {
 
-    useEffect(()=>{
-    const handleScroll=()=>{
-        const scrollY=window.scrollY;
-        const thresh = (window.innerHeight * 4)+50;
-    if(scrollY<thresh)
-    {
-        setIsVisible(false); 
-    }
-    else{
-        setIsVisible(true);
-    }
-    };
-    
-    window.addEventListener('scroll',handleScroll);
-    handleScroll();
+    const [isVisible, setIsVisible] = useState(false);
+    const { scrollY } = useScrollProgress();
+    const thresh = (window.innerHeight * 4) + 50;
 
-    return () => window.removeEventListener('scroll',handleScroll);
-},[]);
-    
-    
+    useEffect(() => {
+        if (scrollY < thresh) {
+            setIsVisible(false);
+        } else {
+            setIsVisible(true);
+        }
+    }, [scrollY, thresh]);
 
-return(
-<header className={`fixed top-0 left-0 w-full z-50 bg-black transition-transform duration-1000 ease-out ${
-            isVisible ? 'translate-y-0' : '-translate-y-full'
-        }`}>
-            
+    return (
+        <header className={`fixed top-0 left-0 w-full z-50 bg-black transition-transform duration-1000 ease-out ${isVisible ? 'translate-y-0' : '-translate-y-full'
+            }`}>
+
             <div className="flex justify-between items-center px-8 py-6">
-                
+
                 {/* Logo */}
                 <h1 className="text-2xl font-helvetica tracking-[-0.04em] text-white font-bbarn">
                     The Bbarn.
@@ -48,17 +35,17 @@ return(
 
                 {/* Nav Links */}
                 <nav className="flex gap-6 text-white  font-helvetica tracking-[-0.04em] font-medium">
-                    
+
                     <a href="#about" className="hover:opacity-50 transition-opacity">Est. 2024</a>
-                    
+
                 </nav>
 
-                {/* CTA Button */}
-                <button className="bg-black text-white px-6 py-2 rounded-full text-sm font-helvetica tracking-[-0.04em] hover:opacity-50 transition-opacity">
-                    Book
-                </button>
+                {/* Menu Component replacing CTA Button */}
+                <div className="relative z-50 flex gap-6 text-white  font-helvetica tracking-[-0.04em] font-medium">
+                    <Menu />
+                </div>
 
             </div>
         </header>
-);
+    );
 }

@@ -1,18 +1,21 @@
-import { Canvas, useFrame, addEffect } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, ContactShadows, useVideoTexture } from '@react-three/drei';
 import React, { useEffect, useRef, useState } from 'react';
-import Lenis from 'lenis';
 import CameraRig from './camera';
 import Spotlight from './spotlight';
 import FlyingComp from './flying';
+import { useScrollProgress } from '../helpers/ScrollManager';
 
 import Dust from './dust';
 
 // --- PART 1: THE TV COMPONENT ---
 function Tv() {
-  // 1. VIDEO SETUP
+  // 1. VIDEO SETUP - Lazy load (will be created on-demand when needed)
+  const [videoTexture, setVideoTexture] = useState(null);
   const urlVid = '/PORTFOLIO.mp4';
-  const videoTexture = useVideoTexture(urlVid, {
+  
+  // Load video texture only when near playback point
+  const videoTextureResource = useVideoTexture(urlVid, {
     start: false,
     muted: true,
     loop: true,
@@ -20,8 +23,6 @@ function Tv() {
 
   const [hasPlayed, setHasPlayed] = useState(false);
   const { scene, materials } = useGLTF('/bbarn-tv.glb');
-
-
 
   // REFS
   const groupRef = useRef();
@@ -55,77 +56,70 @@ function Tv() {
       }
     });
 
-    videoTexture.flipY = false;
-    videoTexture.offset.set(0.1, -0.247);
-    videoTexture.repeat.set(0.8, 1.5);
+    // Only set up video texture when it's loaded
+    if (videoTextureResource) {
+      setVideoTexture(videoTextureResource);
+      
+      videoTextureResource.flipY = false;
+      videoTextureResource.offset.set(0.1, -0.247);
+      videoTextureResource.repeat.set(0.8, 1.5);
 
-    const screenMat = materials['TVScreen.002'];
-    const tvMat = materials['TVBase'];
-
-    
-
-    if (screenMat) {
-        screenMat.map = videoTexture;
-        screenMat.emissiveMap = videoTexture;
-        screenMat.emissiveIntensity = 0; 
-        screenMat.needsUpdate = true;
+      const screenMat = materials['TVScreen.002'];
+      
+      if (screenMat) {
+          screenMat.map = videoTextureResource;
+          screenMat.emissiveMap = videoTextureResource;
+          screenMat.emissiveIntensity = 0; 
+          screenMat.needsUpdate = true;
+      }
     }
 
     scene.traverse((child) => {
-    if (child.isMesh) {
-      ////console.log(`Found Mesh: "${child.name}"`);
-      //console.log(`   - Material Name: "${child.material.name}"`);
-      //console.log(`   - Material Type: "${child.material.type}"`);
-      
-      // OPTIONAL: Force a visual change to see which part is which
-      // If you uncomment this, the whole TV body should turn Hot Pink.
-      // if (child.name === 'TV_Body_Mesh_Name_Here') {
-      //    child.material.color.set('hotpink'); 
-      // }
-      
-      child.castShadow = true;
-      child.receiveShadow = true;
-    }
-  });
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
 
-  }, [scene, materials, videoTexture]);
+  }, [scene, materials, videoTextureResource]);
 
 
   // 3. ANIMATION LOOP
+  const { rotationProgress, introFadeOut } = useScrollProgress();
+  const trackRef2 = useRef(null);
+
   useFrame(() => {
     if (!groupRef.current) return;
-    
-    const track = document.getElementById('rotation-track');
-    if (!track) return;
 
-    const track2 = document.getElementById('zoomin');
-    if (!track2) return;
+    // Cache reference to flying track element
+    if (!trackRef2.current) {
+      trackRef2.current = document.getElementById('zoomin');
+    }
 
-    const track2box = track2.getBoundingClientRect();
-    const scrollY2 = track2box.height - window.innerHeight;       
-    let progress2 = -0.5 * track2box.top / scrollY2;
+    const track2 = trackRef2.current;
+    let progress2 = 0;
 
-    const box = track.getBoundingClientRect();
-    const scrollY = box.height - window.innerHeight;       
-    let progress = -box.top / scrollY;
+    if (track2) {
+      const track2box = track2.getBoundingClientRect();
+      const scrollY2 = track2box.height - window.innerHeight;
+      progress2 = -0.5 * track2box.top / scrollY2;
+      if (progress2 < 0) progress2 = 0;
+      if (progress2 > 0.35) progress2 = 0.35;
+    }
 
-    // Clamps
-    if (progress < 0) progress = 0; 
-    if (progress > 1) progress = 1;
-
-    if (progress2 < 0) progress2 = 0;
-    if (progress2 > 0.35) progress2 = 0.35;
+    const progress = rotationProgress;
+    const totalSpins = 2;
 
     // Rotation
     groupRef.current.rotation.y = -progress * (Math.PI * 2 * totalSpins);
     
-    if(progress2>0){groupRef.current.position.z = -2.9+progress2*5;
-      groupRef.current.position.y = -2.7+progress2*1.5;
-    }
-    else {groupRef.current.position.z = -2.9;
+    if(progress2 > 0) {
+      groupRef.current.position.z = -2.9 + progress2 * 5;
+      groupRef.current.position.y = -2.7 + progress2 * 1.5;
+    } else {
+      groupRef.current.position.z = -2.9;
       groupRef.current.position.y = -2.7;
     }
-
 
     // Screen Intensity
     let intensity = progress / 0.5;
@@ -136,17 +130,8 @@ function Tv() {
       materials['TVScreen.002'].emissiveIntensity = intensity * 15; 
     }
 
-    if (bodyLightRef.current) {
-        // Ramp from 0 to 10 intensity
-        bodyLightRef.current.intensity = 20; 
-    }
-
-    // --- FADE OUT LOGIC (THE FIX) ---
-    let fadeOut = 1;
-    if (progress > 0.8) {
-       fadeOut = 1 - ((progress - 0.8) / 0.2);
-       if (fadeOut < 0) fadeOut = 0;
-    }
+    // --- FADE OUT LOGIC ---
+    const fadeOut = introFadeOut;
 
     // Use the helper function instead of crashing on .material
     if (shadowRef.current) {
@@ -155,11 +140,11 @@ function Tv() {
     
     if (dustRef.current) {
         setOpacity(dustRef.current, 0.7 * fadeOut);
-        // Also hide it completely if opacity is 0 to save performance
+        // Hide completely if opacity is too low to save performance
         dustRef.current.visible = fadeOut > 0.01;
     }
 
-    // Play Video
+    // Play Video only when near the end
     if (progress > 0.99 && !hasPlayed && videoTexture) {
         videoTexture.image.play().catch(e => console.log(e));
         setHasPlayed(true);
@@ -170,13 +155,19 @@ function Tv() {
     <>
       <group ref={groupRef} position={[0, -2.7, -2.9]}>
         <primitive object={scene} scale={0.05} />
-        
+        <ContactShadows
+                    position={[9, -1, -2.9]} 
+                    opacity={1.1}
+                    scale={20}
+                    blur={1.3}
+                    far={8}
+                  />
       </group>
 
       
       
       <group ref={dustRef}>
-         <Dust count={2000} />
+         <Dust count={800} />
       </group>
     </>
   );
@@ -186,25 +177,9 @@ function Tv() {
 
 // --- PART 2: THE SCENE MANAGER ---
 export default function Scene() {
-  
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 2,
-      smooth: true,
-    });
-   
-    const cleanup = addEffect((time) => {
-      lenis.raf(time);
-    });
-
-    return () => {
-      lenis.destroy();
-      cleanup();
-    };
-  }, []);
-
   return (
-    <Canvas shadows style={{ pointerEvents: 'none' }}>
+    <Canvas shadows style={{pointerEvents: 'none' }}>
+      
       <CameraRig />
       
       <pointLight intensity={500} />

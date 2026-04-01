@@ -1,0 +1,10 @@
+.cursor {
+  width: 20px;
+  height: 20px;
+  background-color: white; /* Make sure color contrasts with your black bg */
+  border-radius: 50%;
+  position: fixed; /* CRITICAL: Must be fixed to follow mouse */
+  pointer-events: none; /* CRITICAL: Lets you click through the cursor */
+  z-index: 9999; /* CRITICAL: Must be higher than your 3D Scene (z-50) */
+  mix-blend-mode: difference; /* Optional: Cool effect over text */
+}

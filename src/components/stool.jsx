@@ -1,8 +1,8 @@
-import { Canvas, useFrame, addEffect } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF,ContactShadows} from '@react-three/drei';
-import React, { useEffect, useRef } from 'react';
-import Lenis from 'lenis';
+import React, { useRef } from 'react';
 import CameraRig from './camera';
+import { useScrollProgress } from '../helpers/ScrollManager';
 
 
 function Stool(){
@@ -11,33 +11,20 @@ function Stool(){
   const groupRef = useRef(); 
   
   const totalSpins = 2; 
+  const { rotationProgress } = useScrollProgress();
 
   // The 60FPS Game Loop
   useFrame(() => {
     if (!groupRef.current) return;
-    const track = document.getElementById('rotation-track');
-        if(!track) return;
-
-        const box =track.getBoundingClientRect();
-        const scrollY = box.height - window.innerHeight;       
-        let progress = -box.top/scrollY;
-
-    if (progress < 0) {
-       progress=0;
-    } 
-    if (progress>1){
-       progress=1;
-    }
+    
+    const progress = rotationProgress;
 
     // Direct Update (No Re-renders)
-    if(groupRef.current)
-      {
-        groupRef.current.rotation.y = progress * (Math.PI * 2 * totalSpins);
-      };
+    groupRef.current.rotation.y = progress * (Math.PI * 2 * totalSpins);
   });
 
   return (
-    <group ref={groupRef} position={[0,-4.45, -1.3]} class="z-0">
+    <group ref={groupRef} position={[0,-4.45, -1.3]} className="z-0">
       
     <primitive object={scene} scale={0.05} position={[0,0,0]}/>
     </group>
@@ -48,10 +35,9 @@ function Bg()
   const posRef = useRef();
   const {scene,materials} = useGLTF('/BG-test.glb');
 
-  console.log([scene.position.x,scene.position.y,scene.position.z])
   return(
     <>
-    <primitive object={scene} position={[0,-9,-2]} rotation={[0,-1.6,0]} scale={7}/>
+    <primitive object={scene} position={[0,-9,-3]} rotation={[0,-1.6,0]} scale={7}/>
     <ContactShadows
             position={[0, -4, 0]} 
             opacity={1.1}
@@ -66,33 +52,11 @@ function Bg()
 
 
 export default function StoolModel() {
-  
-  useEffect(() => {
-    // 1. Initialize Lenis
-    const lenis = new Lenis({
-      duration: 2,
-      smooth: true,
-    });
-
-    // 2. SYNC LENIS WITH REACT THREE FIBER
-   
-    const cleanup = addEffect((time) => {
-      lenis.raf(time);
-    });
-
-    return () => {
-      lenis.destroy();
-      cleanup();
-    };
-  }, []);
-
   return (
-<Canvas shadows style={{ pointerEvents: 'none' }}>
+    <Canvas shadows style={{ background: 'transparent', pointerEvents: 'none' }}>
       <CameraRig />
-      
-     
-      
       <Stool />
       <Bg />
     </Canvas>
-  );}
+  );
+}

@@ -40,7 +40,7 @@ export default function CameraRig()
         if(exposureProg>1) exposureProg=1;
         if(exposureProg<0) exposureProg=0;
        // let exposureProgress = exposureProg;
-        let exposure = (exposureProg*0.06);
+        let exposure = (exposureProg*0.1);
         if(exposureProg>1)exposure=1;
         state.gl.toneMappingExposure = exposure;
         //const startpos = new Vector3(0,2,7);
