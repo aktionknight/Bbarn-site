@@ -1,4 +1,4 @@
-import React,{ useRef, useMemo } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { useFrame, useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -21,29 +21,29 @@ export default function Dust({ count = 1000 }) {
       positions[i * 3 + 1] = y;
       positions[i * 3 + 2] = z;
     }
-    
+
     return positions;
   }, [count]);
 
   // 2. Animate the Cloud
   useFrame((state, delta) => {
     if (mesh.current) {
-        // Rotate the whole cloud slowly for "floating" feel
-        //mesh.current.rotation.y += delta * 0.05;
-       // mesh.current.rotation.x += delta * 0.01;
-        
-        // Optional: Gentle wave motion
-       mesh.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.15;
+      // Rotate the whole cloud slowly for "floating" feel
+      //mesh.current.rotation.y += delta * 0.05;
+      // mesh.current.rotation.x += delta * 0.01;
+
+      // Optional: Gentle wave motion
+      mesh.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.15;
       mesh.current.position.x = Math.sin(state.clock.elapsedTime * 0.5) * 0.15;
-    
-      }
+
+    }
   });
 
   return (
     <points ref={mesh}>
       <bufferGeometry>
         <bufferAttribute
-          
+
           attach="attributes-position"
           count={count}
           array={particlesPosition}
@@ -56,12 +56,13 @@ export default function Dust({ count = 1000 }) {
       */}
       <pointsMaterial
         map={texture}
-        size={0.05}
+        size={0.15}
         color="#ffffff"
-        transparent
-        opacity={0.7}
+        transparent={true}
+        opacity={1}
+        blending={THREE.AdditiveBlending}
         sizeAttenuation={true}
-        depthWrite={false} 
+        depthWrite={false}
       />
     </points>
   );

@@ -15,7 +15,7 @@ function PerspectiveText({ label }) {
 
 export default function Button({ isActive, toggleMenu }) {
   return (
-    <div className="relative w-[100px] h-[40px] rounded-[25px] cursor-pointer overflow-hidden z-20">
+    <div className="relative w-[100px] h-[40px] rounded-[25px] cursor-none overflow-hidden z-20">
       <motion.div
         className="relative w-full h-full"
         animate={{ top: isActive ? "-100%" : "0%" }}

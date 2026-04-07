@@ -10,6 +10,8 @@ import Scene from '../components/scene';
 import TextOverlay from '../components/textoverlay';
 import FlyingComp from '../components/flying';
 import Demos from '../components/demos';
+import DynamicTextEffect from '../components/DynamicTextEffect';
+import Portfolio from '../components/portfolio';
 
 import GridBackground from '../components/GridBackground';
 
@@ -33,6 +35,8 @@ export default function PageWrapper() {
         </div>
 
         <div className="relative h-[600vh] w-full z-40"></div>
+
+        <DynamicTextEffect />
 
         <div className="relative h-[1000vh]" id="rotation-track"></div>
 
@@ -60,13 +64,16 @@ export default function PageWrapper() {
         </div>
 
         {/* Updated section with Grid Background and changed to transparent */}
-        <div className="relative z-30 bg-red-900 text-white h-[500vh] flex flex-col items-center">
+        <div className="relative z-30 bg-red-900 text-white min-h-[500vh] flex flex-col items-center">
           <GridBackground />
           <h2 className="fixed text-6xl font-bold mt-[20vh] z-10 mix-blend-difference text-white">What do we do ?</h2>
           <Demos />
         </div>
 
-        <div className="relative bg-black w-screen h-[100vh] z-30">Hello</div>
+        {/* Portfolio slides over the previous section via negative margin */}
+        <div className="relative z-40 mt-[-100vh]">
+          <Portfolio />
+        </div>
       </ScrollProvider>
     </LenisProvider>
   );

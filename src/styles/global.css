@@ -1,24 +1,27 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
 
-@font-face{
-    font-family : 'helvetica';
-    src : url('/fonts/Helvetica.ttf') format('ttf'),
-         
+@font-face {
+  font-family: 'helvetica';
+  src: url('/fonts/Helvetica.ttf') format('ttf'),
+
 }
 
 
-body{
-    cursor:none;
+body {
+  cursor: none !important;
 }
-*, *::before, *::after {
+
+*,
+*::before,
+*::after {
   cursor: none !important;
 }
 
 
-.helvetica{
-    font-family: 'Helvetica', sans-serif;
-    letter-spacing: -2em;
+.helvetica {
+  font-family: 'Helvetica', sans-serif;
+  letter-spacing: -2em;
 }
 
 #bg-video {
@@ -27,22 +30,29 @@ body{
   left: 0;
   width: 100vw;
   height: 100vh;
-  object-fit: cover; /* This makes it zoom/crop automatically like a wallpaper */
-  z-index: -10; /* Puts it behind the Canvas */
+  object-fit: cover;
+  /* This makes it zoom/crop automatically like a wallpaper */
+  z-index: -10;
+  /* Puts it behind the Canvas */
 }
 
-html.lenis, html.lenis body {
- height: auto;
+html.lenis,
+html.lenis body {
+  height: auto;
 }
+
 .lenis.lenis-smooth {
- scroll-behavior: auto !important;
+  scroll-behavior: auto !important;
 }
+
 .lenis.lenis-smooth [data-lenis-prevent] {
- overscroll-behavior: contain;
+  overscroll-behavior: contain;
 }
+
 .lenis.lenis-stopped {
- overflow: hidden;
+  overflow: hidden;
 }
+
 .lenis.lenis-smooth iframe {
- pointer-events: none;
+  pointer-events: none;
 }
